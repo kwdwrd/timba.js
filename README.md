@@ -47,7 +47,7 @@ apologize.addBeat();
 apologize.addRest( 1.25 );
 apologize.addBeat( { detune: -200 } );
 
-Timbaland.ambient( apologize, { min_delay: 2000, max_delay: 20000 } );
+Timbaland.ambient( apologize, { min_delay: 5000, max_delay: 10000 } );
 ```
 
 ### Major chord in the key of Timba

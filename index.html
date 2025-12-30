@@ -12,6 +12,8 @@
 		.container{max-width:900px;margin:0 auto;padding:2.5rem 1rem}
 
 		.site-header{padding:2.5rem 0 1rem;border-bottom:1px solid rgba(17,24,39,0.06);background:linear-gradient(180deg,rgba(91,33,182,0.02),transparent)}
+		.site-header .brand{display:flex;align-items:center;gap:1rem}
+		.logo{width:48px;height:48px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#8b5cf6);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-family:sans-serif}
 		.site-header h1{font-size:2.25rem;margin:0 0 .25rem;font-weight:600;letter-spacing:-0.5px}
 		.site-header p{margin:0;color:var(--muted)}
 
@@ -27,6 +29,7 @@
 		.example button{appearance:none;border:1px solid rgba(15,23,42,0.08);background:#fff;padding:.4rem .6rem;border-radius:6px;font-weight:600;cursor:pointer}
 		.example button:hover{transform:translateY(-1px);box-shadow:0 6px 12px rgba(15,23,42,0.06)}
 		.example button.running{background:linear-gradient(90deg,var(--accent),#8b5cf6);color:#fff;border-color:transparent}
+		.example .status-pill{display:inline-block;padding:.2rem .5rem;border-radius:999px;background:linear-gradient(90deg,var(--accent),#8b5cf6);color:#fff;font-size:12px;font-weight:700}
 		.output{margin-top:.5rem;font-family:'Inconsolata',monospace;color:#334155;font-size:13px;white-space:pre-wrap}
 
 		.site-footer{padding:1.25rem 0;border-top:1px solid rgba(17,24,39,0.04);color:var(--muted);font-size:14px}
@@ -37,8 +40,13 @@
 <body>
 	<header class="site-header">
 		<div class="container">
-			<h1>timba.js</h1>
-			<p>timba.js is a full-featured Javascript file to give your page that singular Timbaland polish.</p>
+			<div class="brand">
+				<div class="logo" aria-hidden="true">T</div>
+				<div>
+					<h1>timba.js</h1>
+					<p>timba.js is a full-featured Javascript file to give your page that singular Timbaland polish.</p>
+				</div>
+			</div>
 		</div>
 	</header>
 
@@ -87,7 +95,7 @@ apologize.addBeat();
 apologize.addRest( 1.25 );
 apologize.addBeat( { detune: -200 } );
 
-Timbaland.ambient( apologize, { min_delay: 2000, max_delay: 20000 } );</code></pre>
+Timbaland.ambient( apologize, { min_delay: 5000, max_delay: 10000 } );</code></pre>
 
 			<h4>Major chord in the key of Timba</h4>
 			<pre><code>var major_timba = new Timbaland.harmony( [ { detune: 0 }, { detune: 400 }, { detune: 700 } ] );
@@ -119,6 +127,7 @@ Timbaland.schedule( gymnopedie, 5000 );</code></pre>
 
 	<!-- Restore original auto-test on load -->
 	<script language="javascript">
+        Timbaland.installWhenPossible();
 		// window.addEventListener( 'load', () => { Timbaland.test(); } )
 	</script>
 
@@ -130,8 +139,10 @@ Timbaland.schedule( gymnopedie, 5000 );</code></pre>
 			container.className = 'example';
 
 			var ctrl = document.createElement('div');
+			ctrl.className = 'controls';
 			var run = document.createElement('button'); run.textContent = 'Run';
 			var stop = document.createElement('button'); stop.textContent = 'Stop';
+			stop.disabled = true;
 			ctrl.appendChild(run);
 			ctrl.appendChild(stop);
 
@@ -149,6 +160,12 @@ Timbaland.schedule( gymnopedie, 5000 );</code></pre>
 			run.addEventListener('click', function() {
 				out.textContent = '';
 				try {
+					// update UI to running state
+					run.classList.add('running');
+					run.textContent = 'Now playing';
+					run.disabled = true;
+					stop.disabled = false;
+
 					// If the code looks like HTML (starts with '<'), inject it into the page
 					if (/^\s*</.test(codeText)) {
 						if (wrapper) { wrapper.remove(); wrapper = null; }
@@ -162,11 +179,16 @@ Timbaland.schedule( gymnopedie, 5000 );</code></pre>
 
 					// Otherwise execute the code as JS in a Function (safer than eval)
 					var fn = new Function(codeText);
-                    Timbaland.cancel();
+					Timbaland.cancel();
 					fn();
 					out.textContent = 'Ran successfully';
 				} catch (e) {
 					out.textContent = 'Error: ' + (e && e.message ? e.message : e);
+					// revert UI on error
+					run.classList.remove('running');
+					run.textContent = 'Run';
+					run.disabled = false;
+					stop.disabled = true;
 				}
 			});
 
@@ -176,12 +198,19 @@ Timbaland.schedule( gymnopedie, 5000 );</code></pre>
 					if (wrapper) { wrapper.remove(); wrapper = null; }
 					if (window.Timbaland && Timbaland.cancel) { Timbaland.cancel(); }
 					out.textContent = 'Stopped';
+					// reset UI
+					run.classList.remove('running');
+					run.textContent = 'Run';
+					run.disabled = false;
+					stop.disabled = true;
 				} catch (e) { out.textContent = 'Error stopping: ' + e; }
 			});
 		}
 
 		document.addEventListener('DOMContentLoaded', function() {
-			document.querySelectorAll('main pre code').forEach(function(code) {
+			document.querySelectorAll('main pre code').forEach(function(code, idx) {
+				// skip controls for the first example (canonical 'Eh, World!')
+				if (idx === 0) return;
 				var text = code.textContent;
 				makeControls(code.parentNode, text);
 			});
