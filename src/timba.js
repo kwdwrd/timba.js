@@ -315,7 +315,7 @@ var Timbaland;
 
 
         Timbaland.harmony.prototype.play = function (t) {
-            this.beats.foreach( (beat) => { beat.play(t); } );
+            this.beats.forEach( (beat) => { beat.play(t); } );
 
             return 0;
         };
@@ -340,6 +340,12 @@ var Timbaland;
 
         Timbaland.loop.prototype.addElement = function (o) {
             this.loop_items.push(o);
+        };
+
+
+
+        Timbaland.loop.prototype.addHarmony = function (a) {
+            this.addElement(new Timbaland.harmony(a));
         };
 
 

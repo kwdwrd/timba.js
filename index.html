@@ -63,7 +63,7 @@
 <code>
 &lt;script src="https://timbajs.eightbeers.org/timba.js"&gt;&lt;/script&gt;
 &lt;script language="javascript"&gt;
-  var beat = Timbaland.beat( { detune: 100 } );
+  var beat = new Timbaland.beat( { detune: 100 } );
 
   Timbaland.installWhenPossible( Timbaland.schedule( beat, 2000 ) );
 &lt;/script&gt;
@@ -71,7 +71,7 @@
 <code>
 &lt;script src="https://timbajs.eightbeers.org/timba.js"&gt;&lt;/script&gt;
 &lt;script language="javascript"&gt;
-  var apologize = Timbaland.loop( { tempo: 100 } );
+  var apologize = new Timbaland.loop( { tempo: 100 } );
 
   apologize.addBeat();
   apologize.addRest( 2 );
@@ -80,6 +80,29 @@
   apologize.addBeat( { detune: -200 } );
 
    Timbaland.installWhenPossible( Timbaland.ambient( apologize ) );
+&lt;/script&gt;
+</code>
+<code>
+&lt;script language="javascript"&gt;
+    var major_timba = new Timbaland.harmony( [ { detune: 0 }, { detune: 400 }, { detune: 700 } ] );
+
+    Timbaland.installWhenPossible( Timbaland.schedule( major_timba, 2000 ) );
+&lt;/script&gt;
+</code>
+<code>
+&lt;script language="javascript"&gt;
+    var gymnopedie = new Timbaland.loop( { tempo: 80 } );
+
+    gymnopedie.addBeat( { detune: 0 } );
+    gymnopedie.addRest( 1 );
+    gymnopedie.addHarmony( [ { detune: 400 }, { detune: 700 }, { detune: 1100 } ] );
+    gymnopedie.addRest( 2 );
+    gymnopedie.addBeat( { detune: -700 } );
+    gymnopedie.addRest( 1 );
+    gymnopedie.addHarmony( [ { detune: 200 }, { detune: 600 }, { detune: 1100 } ] );
+    gymnopedie.addRest( 2 );
+
+    Timbaland.installWhenPossible( Timbaland.schedule( gymnopedie, 5000 ) );
 &lt;/script&gt;
 </code>
 </div>
