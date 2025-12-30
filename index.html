@@ -1,0 +1,91 @@
+
+<!doctype html>
+<html>
+<head>
+	<link href="https://fonts.googleapis.com/css?family=Inconsolata&display=swap" rel="stylesheet" />
+	<link href="https://fonts.googleapis.com/css?family=Raleway:400,600&display=swap" rel="stylesheet" />
+	<script language="javascript" src="timba.js"></script>
+	<style type="text/css">
+		body
+		{
+			font-family: 'Raleway', sans-serif;
+			margin:      0px;
+		}
+
+		code
+		{
+			font-family: 'Inconsolata', monospace;
+			font-size:   10pt;
+			white-space: pre;
+		}
+
+		div#in-browser
+		{
+			color:   #777;
+			margin:  4ex;
+		}
+
+		div#is-everywhere
+		{
+			background-color: black;
+			color:            white;
+			font-size:        32pt;
+			font-weight:      bold;
+			height:           400px;
+			line-height:      400px;
+			text-align:       center;
+		}
+
+		div#timbaland
+		{
+			font-size:   72pt;
+			font-weight: bold;
+			height:      400px;
+			line-height: 400px;
+			margin-bottom: -200px;
+			padding-bottom: 36pt;
+			text-align:  center;
+		}
+	</style>
+</head>
+<body>
+<div id="timbaland">Timbaland</div>
+<div id="is-everywhere">is everywhere.</div>
+<div id="in-browser">
+	<h2>Even in your browser.
+	</h2>
+<code>
+&lt;script src="https://timbajs.eightbeers.org/timba.js"&gt;&lt;/script&gt;
+&lt;script language="javascript"&gt;
+  Timbaland.installWhenPossible( Timbaland.ambient() );
+&lt;/script&gt;
+</code>
+<code>
+&lt;script src="https://timbajs.eightbeers.org/timba.js"&gt;&lt;/script&gt;
+&lt;script language="javascript"&gt;
+  var beat = Timbaland.beat( { detune: 100 } );
+
+  Timbaland.installWhenPossible( Timbaland.schedule( beat, 2000 ) );
+&lt;/script&gt;
+</code>
+<code>
+&lt;script src="https://timbajs.eightbeers.org/timba.js"&gt;&lt;/script&gt;
+&lt;script language="javascript"&gt;
+  var apologize = Timbaland.loop( { tempo: 100 } );
+
+  apologize.addBeat();
+  apologize.addRest( 2 );
+  apologize.addBeat();
+  apologize.addRest( 1.25 );
+  apologize.addBeat( { detune: -200 } );
+
+   Timbaland.installWhenPossible( Timbaland.ambient( apologize ) );
+&lt;/script&gt;
+</code>
+</div>
+<script language="javascript">
+	Timbaland.test();
+</script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"version":"2024.11.0","token":"daac6d57dbf9468a89baa20886730da9","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+</body>
+</html>
