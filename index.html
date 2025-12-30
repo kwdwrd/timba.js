@@ -5,110 +5,189 @@
 	<link href="https://fonts.googleapis.com/css?family=Inconsolata&display=swap" rel="stylesheet" />
 	<link href="https://fonts.googleapis.com/css?family=Raleway:400,600&display=swap" rel="stylesheet" />
 	<script language="javascript" src="./src/timba.js"></script>
-	<style type="text/css">
-		body
-		{
-			font-family: 'Raleway', sans-serif;
-			margin:      0px;
-		}
+	<style>
+		:root{--bg:#f7f8fa;--card:#ffffff;--muted:#6b7280;--accent:#5b21b6;--code-bg:#0f1720;--code-fg:#c9d1d9}
+		html,body{height:100%}
+		body{font-family: 'Raleway', sans-serif; margin:0; background:var(--bg); color:#111; font-size:16px; line-height:1.6}
+		.container{max-width:900px;margin:0 auto;padding:2.5rem 1rem}
 
-		code
-		{
-			font-family: 'Inconsolata', monospace;
-			font-size:   10pt;
-			white-space: pre;
-		}
+		.site-header{padding:2.5rem 0 1rem;border-bottom:1px solid rgba(17,24,39,0.06);background:linear-gradient(180deg,rgba(91,33,182,0.02),transparent)}
+		.site-header h1{font-size:2.25rem;margin:0 0 .25rem;font-weight:600;letter-spacing:-0.5px}
+		.site-header p{margin:0;color:var(--muted)}
 
-		div#in-browser
-		{
-			color:   #777;
-			margin:  4ex;
-		}
+		.content{padding:2rem 0}
+		section{margin-bottom:1.75rem}
+		h2{font-size:1.25rem;margin:0 0 .5rem}
 
-		div#is-everywhere
-		{
-			background-color: black;
-			color:            white;
-			font-size:        32pt;
-			font-weight:      bold;
-			height:           400px;
-			line-height:      400px;
-			text-align:       center;
-		}
+		pre{background:var(--code-bg);color:var(--code-fg);padding:1rem;border-radius:8px;overflow:auto;font-size:13px;line-height:1.45}
+		code{font-family: 'Inconsolata', monospace;background:transparent;color:inherit;white-space:pre}
 
-		div#timbaland
-		{
-			font-size:   72pt;
-			font-weight: bold;
-			height:      400px;
-			line-height: 400px;
-			margin-bottom: -200px;
-			padding-bottom: 36pt;
-			text-align:  center;
-		}
+		.example{border-radius:10px;background:var(--card);box-shadow:0 6px 18px rgba(15,23,42,0.06);padding:0.75rem;margin:1rem 0;border:1px solid rgba(15,23,42,0.03)}
+		.example .controls{display:flex;gap:.5rem;margin-bottom:.65rem}
+		.example button{appearance:none;border:1px solid rgba(15,23,42,0.08);background:#fff;padding:.4rem .6rem;border-radius:6px;font-weight:600;cursor:pointer}
+		.example button:hover{transform:translateY(-1px);box-shadow:0 6px 12px rgba(15,23,42,0.06)}
+		.example button.running{background:linear-gradient(90deg,var(--accent),#8b5cf6);color:#fff;border-color:transparent}
+		.output{margin-top:.5rem;font-family:'Inconsolata',monospace;color:#334155;font-size:13px;white-space:pre-wrap}
+
+		.site-footer{padding:1.25rem 0;border-top:1px solid rgba(17,24,39,0.04);color:var(--muted);font-size:14px}
+
+		@media (min-width: 900px){ .site-header{padding:3rem 0 1rem} .site-header h1{font-size:2.75rem} }
 	</style>
 </head>
 <body>
-<div id="timbaland">Timbaland</div>
-<div id="is-everywhere">is everywhere.</div>
-<div id="in-browser">
-	<h2>Even in your browser.
-	</h2>
-<code>
-&lt;script src="https://timbajs.eightbeers.org/timba.js"&gt;&lt;/script&gt;
+	<header class="site-header">
+		<div class="container">
+			<h1>timba.js</h1>
+			<p>timba.js is a full-featured Javascript file to give your page that singular Timbaland polish.</p>
+		</div>
+	</header>
+
+	<main class="content container">
+		<section>
+			<h2>Eh, World!</h2>
+			<p>Obtaining authentic production value is straightforward by design. The following script will randomly play "Eh" at intervals between 0 and 15 seconds, beginning the moment the user interacts with your page.</p>
+			<pre><code>&lt;script src="https://kwdwrd.github.io/timba.js/src/timba.js"&gt;&lt;/script&gt;
 &lt;script language="javascript"&gt;
   Timbaland.installWhenPossible( Timbaland.ambient() );
-&lt;/script&gt;
-</code>
-<code>
-&lt;script src="https://timbajs.eightbeers.org/timba.js"&gt;&lt;/script&gt;
-&lt;script language="javascript"&gt;
-  var beat = new Timbaland.beat( { detune: 100 } );
+&lt;/script&gt;</code></pre>
+		</section>
 
-  Timbaland.installWhenPossible( Timbaland.schedule( beat, 2000 ) );
-&lt;/script&gt;
-</code>
-<code>
-&lt;script src="https://timbajs.eightbeers.org/timba.js"&gt;&lt;/script&gt;
-&lt;script language="javascript"&gt;
-  var apologize = new Timbaland.loop( { tempo: 100 } );
+		<section>
+			<h2>Limitations</h2>
+			<p>Browser audio contexts are not available until page interaction. Your webpage will not be fully produced until the user interacts with the page. This is the role of <code>Timbaland.installWhenPossible</code>.</p>
 
-  apologize.addBeat();
-  apologize.addRest( 2 );
-  apologize.addBeat();
-  apologize.addRest( 1.25 );
-  apologize.addBeat( { detune: -200 } );
+			<h3>Known limitations and pitfalls</h3>
+			<ul>
+				<li>Timba's scheduler is indexed from loop start. For example, if your loop takes 10 seconds to play and is scheduled to play every 5 seconds, your loops will overlap.</li>
+				<li>Timba's loop installation is accretive, and canceling loop play (via <code>Timbaland.cancel()</code>) does <em>not</em> prevent the loops from being subsequently uninstalled. To reinitialize the loop set, run <code>Timbaland.repeaters = []</code>.</li>
+			</ul>
+		</section>
 
-   Timbaland.installWhenPossible( Timbaland.ambient( apologize ) );
-&lt;/script&gt;
-</code>
-<code>
-&lt;script language="javascript"&gt;
-    var major_timba = new Timbaland.harmony( [ { detune: 0 }, { detune: 400 }, { detune: 700 } ] );
+		<section>
+			<h2>Usage</h2>
+			<h3>Core concepts</h3>
+			<p><code>Timbaland</code> hosts a set of scheduled <code>loop</code>s. A <code>loop</code> is defined by its tempo, and consists of a sequence of <code>beat</code>s, <code>rest</code>s, and <code>harmony</code>s. <code>beat</code>s and <code>harmony</code>s take zero time and are spaced by <code>rest</code>s. A <code>beat</code> is defined by <code>detune</code> and <code>volume</code>. A harmony is simply a set of beats played simultaneously.</p>
 
-    Timbaland.installWhenPossible( Timbaland.schedule( major_timba, 2000 ) );
-&lt;/script&gt;
-</code>
-<code>
-&lt;script language="javascript"&gt;
-    var gymnopedie = new Timbaland.loop( { tempo: 80 } );
+			<h3>Examples</h3>
 
-    gymnopedie.addBeat( { detune: 0 } );
-    gymnopedie.addRest( 1 );
-    gymnopedie.addHarmony( [ { detune: 400 }, { detune: 700 }, { detune: 1100 } ] );
-    gymnopedie.addRest( 2 );
-    gymnopedie.addBeat( { detune: -700 } );
-    gymnopedie.addRest( 1 );
-    gymnopedie.addHarmony( [ { detune: 200 }, { detune: 600 }, { detune: 1100 } ] );
-    gymnopedie.addRest( 2 );
+			<h4>Classic Timba</h4>
+			<pre><code>Timbaland.ambient();</code></pre>
 
-    Timbaland.installWhenPossible( Timbaland.schedule( gymnopedie, 5000 ) );
-&lt;/script&gt;
-</code>
-</div>
-<script language="javascript">
-    window.addEventListener( 'load', () => { Timbaland.test(); } )
-</script>
-<script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"version":"2024.11.0","token":"daac6d57dbf9468a89baa20886730da9","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+			<h4>Deterministic Timba</h4>
+			<pre><code>var beat = new Timbaland.beat( { detune: 100 } );
+
+Timbaland.schedule( beat, 2000 );</code></pre>
+
+			<h4>It's too late...</h4>
+			<pre><code>var apologize = new Timbaland.loop( { tempo: 100 } );
+
+apologize.addBeat();
+apologize.addRest( 2 );
+apologize.addBeat();
+apologize.addRest( 1.25 );
+apologize.addBeat( { detune: -200 } );
+
+Timbaland.ambient( apologize, { min_delay: 2000, max_delay: 20000 } );</code></pre>
+
+			<h4>Major chord in the key of Timba</h4>
+			<pre><code>var major_timba = new Timbaland.harmony( [ { detune: 0 }, { detune: 400 }, { detune: 700 } ] );
+
+Timbaland.schedule( major_timba, 2000 );</code></pre>
+
+			<h4>Sadie's first Gymnopedie</h4>
+			<pre><code>var gymnopedie = new Timbaland.loop( { tempo: 80 } );
+
+gymnopedie.addBeat( { detune: 0 } );
+gymnopedie.addRest( 1 );
+gymnopedie.addHarmony( [ { detune: 400 }, { detune: 700 }, { detune: 1100 } ] );
+gymnopedie.addRest( 2 );
+gymnopedie.addBeat( { detune: -700 } );
+gymnopedie.addRest( 1 );
+gymnopedie.addHarmony( [ { detune: 200 }, { detune: 600 }, { detune: 1100 } ] );
+gymnopedie.addRest( 2 );
+
+Timbaland.schedule( gymnopedie, 5000 );</code></pre>
+
+			<h4>End it all</h4>
+			<pre><code>Timbaland.cancel()</code></pre>
+		</section>
+	</main>
+
+	<footer class="site-footer container">
+		<p>See <a href="README.md">README.md</a> for more details.</p>
+	</footer>
+
+	<!-- Restore original auto-test on load -->
+	<script language="javascript">
+		// window.addEventListener( 'load', () => { Timbaland.test(); } )
+	</script>
+
+	<!-- Example preview: Run / Stop controls for code samples -->
+	<script>
+	(function(){
+		function makeControls(pre, codeText) {
+			var container = document.createElement('div');
+			container.className = 'example';
+
+			var ctrl = document.createElement('div');
+			var run = document.createElement('button'); run.textContent = 'Run';
+			var stop = document.createElement('button'); stop.textContent = 'Stop';
+			ctrl.appendChild(run);
+			ctrl.appendChild(stop);
+
+			var out = document.createElement('div'); out.className = 'output';
+
+			container.appendChild(ctrl);
+
+			// move the pre into the container
+			pre.parentNode.insertBefore(container, pre);
+			container.appendChild(pre);
+			container.appendChild(out);
+
+			var wrapper = null;
+
+			run.addEventListener('click', function() {
+				out.textContent = '';
+				try {
+					// If the code looks like HTML (starts with '<'), inject it into the page
+					if (/^\s*</.test(codeText)) {
+						if (wrapper) { wrapper.remove(); wrapper = null; }
+						wrapper = document.createElement('div');
+						wrapper.style.display = 'none';
+						wrapper.innerHTML = codeText;
+						document.body.appendChild(wrapper);
+						out.textContent = 'Inserted HTML demo (scripts executed if any)';
+						return;
+					}
+
+					// Otherwise execute the code as JS in a Function (safer than eval)
+					var fn = new Function(codeText);
+                    Timbaland.cancel();
+					fn();
+					out.textContent = 'Ran successfully';
+				} catch (e) {
+					out.textContent = 'Error: ' + (e && e.message ? e.message : e);
+				}
+			});
+
+			stop.addEventListener('click', function() {
+				try {
+					// best-effort stop: remove injected wrapper and cancel timba
+					if (wrapper) { wrapper.remove(); wrapper = null; }
+					if (window.Timbaland && Timbaland.cancel) { Timbaland.cancel(); }
+					out.textContent = 'Stopped';
+				} catch (e) { out.textContent = 'Error stopping: ' + e; }
+			});
+		}
+
+		document.addEventListener('DOMContentLoaded', function() {
+			document.querySelectorAll('main pre code').forEach(function(code) {
+				var text = code.textContent;
+				makeControls(code.parentNode, text);
+			});
+		});
+	})();
+	</script>
+
 </body>
 </html>

@@ -7,7 +7,7 @@ Obtaining authentic production value is straightforward by design. The following
 ```
 <script src="https://kwdwrd.github.io/timba.js/src/timba.js"></script>
 <script language="javascript">
-  Timbaland.installWhenPossible( Timbaland.ambient( { min_delay: 0, max_delay: 15000 }) );
+  Timbaland.installWhenPossible( Timbaland.ambient() );
 </script>
 ```
 

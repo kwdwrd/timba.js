@@ -15,7 +15,10 @@ var Timbaland;
                 o = new Timbaland.beat();
             }
 
-            var r = new Timbaland.repeater(o, options.min_delay, options.max_delay);
+            var min_delay = options && options.min_delay ? options.min_delay : 0;
+            var max_delay = options && options.max_delay ? options.max_delay : 15000;
+
+            var r = new Timbaland.repeater(o, min_delay, max_delay);
             this.repeaters.push(r);
 
             if (Timbaland.installed) {
@@ -246,7 +249,7 @@ var Timbaland;
             }
 
             var _this = this;
-            this.installListeners(['click', 'keydown'], function () {
+            this.installListeners(['change', 'click', 'touchend'], function () {
                 _this.finishInstall(acc, rej);
             });
         };
