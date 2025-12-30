@@ -222,18 +222,9 @@ var Timbaland;
             const wrapped_fn = function () {
                 fn();
                 controller.abort();
-                // for ( var i = 0; i < events.length; ++i )
-                // {
-                // 	window.removeEventListener( events[i], nf );
-                // }
             };
 
             events.forEach((e) => { window.addEventListener(e, wrapped_fn, { signal: signal }); });
-
-            // for ( var i = 0; i < events.length; ++i )
-            // {
-            // 	window.addEventListener( events[i], wrapped_fn );
-            // }
         };
 
 
@@ -311,6 +302,20 @@ var Timbaland;
         Timbaland.beat.prototype.play = function (t) {
             this.getBeat();
             this.o_beat.start(t);
+
+            return 0;
+        };
+    };
+
+
+
+    Timbaland.harmony = function (a) {
+        this.beats = a.map( (o) => new Timbaland.beat(o) );
+
+
+
+        Timbaland.harmony.prototype.play = function (t) {
+            this.beats.foreach( (beat) => { beat.play(t); } );
 
             return 0;
         };
