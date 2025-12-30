@@ -10,7 +10,7 @@ var Timbaland;
 
 
 
-        Timbaland.prototype.ambient = function (o, options) {
+        Timbaland.prototype.ambient = function (o, options, immediate) {
             if (!o) {
                 o = new Timbaland.beat();
             }
@@ -22,7 +22,7 @@ var Timbaland;
             this.repeaters.push(r);
 
             if (Timbaland.installed) {
-                r.run();
+                r.run(immediate);
             }
 
             return r;
@@ -205,7 +205,7 @@ var Timbaland;
 
 
         Timbaland.prototype.schedule = function (o, delay) {
-            return this.ambient(o, { min_delay: delay, max_delay: delay });
+            return this.ambient(o, { min_delay: delay, max_delay: delay }, true);
         };
 
 
@@ -402,8 +402,12 @@ var Timbaland;
 
 
 
-    Timbaland.repeater.prototype.run = function () {
+    Timbaland.repeater.prototype.run = function ( immediate ) {
         this.cancel();
+
+        if ( immediate ) {
+            this.loop.play();
+        }
 
         var _this = this;
         if (this.min == this.max) {
