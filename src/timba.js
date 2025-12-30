@@ -234,20 +234,25 @@ var Timbaland;
 
 
 
-		Timbaland.prototype.installListeners = function ( L, f )
+		Timbaland.prototype.installListeners = function ( events, fn )
 		{
-			var ff = function () {
-				f();
-				for ( var i = 0; i < L.length; ++i )
-				{
-					window.removeEventListener( L[i], nf );
-				}
+            const controller = AbortController();
+            const signal = controller.signal;
+			const wrapped_fn = function () {
+				fn();
+                controller.abort();
+				// for ( var i = 0; i < events.length; ++i )
+				// {
+				// 	window.removeEventListener( events[i], nf );
+				// }
 			};
 
-			for ( var i = 0; i < L.length; ++i )
-			{
-				window.addEventListener( L[i], ff );
-			}
+            events.forEach( ( e ) => { window.addEventListener( e, wrapped_fn, { signal: signal } ); } );
+
+			// for ( var i = 0; i < events.length; ++i )
+			// {
+			// 	window.addEventListener( events[i], wrapped_fn );
+			// }
 		};
 
 
