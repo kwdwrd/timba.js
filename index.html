@@ -150,7 +150,7 @@ var steps = 36;
 for ( var i = 0; i < steps; ++i )
 {
     loop.addHarmony( [
-        { detune: -2400 + i * 1200 / steps, volume: i / steps },
+        { detune: -2400 + i * 1200 / steps, volume: ( i + 1 ) / steps },
         { detune: -1200 + i * 1200 / steps, volume: 1 },
         { detune: i * 1200 / steps, volume: 1 },
         { detune: 1200 + i * 1200 / steps, volume: ( steps - i ) / steps }
@@ -158,7 +158,7 @@ for ( var i = 0; i < steps; ++i )
     loop.addRest( rest );
 }
 
-Timbaland.schedule( loop, 6 * steps * tempo * rest );</code></pre>
+Timbaland.schedule( loop, 600 * steps * rest / tempo );</code></pre>
 
 			<h4>I found your number on the wall</h4>
 			<pre><code>var to_beat = ( hz ) => new Timbaland.beat( { detune: Math.log( hz / 1e3 ) / Math.log( 2 ) * 1200 } );
