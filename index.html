@@ -4,6 +4,13 @@
 <head>
 	<link href="https://fonts.googleapis.com/css?family=Inconsolata&display=swap" rel="stylesheet" />
 	<link href="https://fonts.googleapis.com/css?family=Raleway:400,600&display=swap" rel="stylesheet" />
+	<script>
+window.MathJax = {
+  tex: { inlineMath: [['\\(', '\\)'], ['$', '$']], displayMath: [['$$','$$']] },
+  svg: { fontCache: 'global' }
+};
+	</script>
+	<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 	<script language="javascript" src="./src/timba.js"></script>
 	<style>
 		:root{--bg:#f7f8fa;--card:#ffffff;--muted:#6b7280;--accent:#5b21b6;--code-bg:#0f1720;--code-fg:#c9d1d9}
@@ -12,7 +19,9 @@
 		.container{max-width:900px;margin:0 auto;padding:2.5rem 1rem}
 
 		.site-header{padding:2.5rem 0 1rem;border-bottom:1px solid rgba(17,24,39,0.06);background:linear-gradient(180deg,rgba(91,33,182,0.02),transparent)}
-		.site-header .brand{display:flex;align-items:center;gap:1rem}
+		.site-header .brand{display:flex;align-items:center;gap:1rem;vertical-align:top;}
+		.site-header .brand p{margin-bottom:2ex;}
+		.site-header .brand p:last-child{margin-bottom:0ex;}
 		.logo{width:48px;height:48px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#8b5cf6);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-family:sans-serif}
 		.site-header h1{font-size:2.25rem;margin:0 0 .25rem;font-weight:600;letter-spacing:-0.5px}
 		.site-header p{margin:0;color:var(--muted)}
@@ -45,6 +54,7 @@
 				<div>
 					<h1>timba.js</h1>
 					<p>timba.js is a full-featured Javascript file to give your page that singular Timbaland polish.</p>
+					<p>timba.js also settles the long-running question of whether HTML5 is Timbaland-complete; i.e., can HTML5 generate any audio derived from the regular language defined from the alphabet $\Sigma = \{ \text{Pause}, \text{Eh} \}$.</p>
 				</div>
 			</div>
 		</div>
@@ -102,7 +112,7 @@ Timbaland.ambient( apologize, { min_delay: 5000, max_delay: 10000 } );</code></p
 
 Timbaland.schedule( major_timba, 2000 );</code></pre>
 
-			<h4>Sadie's first Gymnopedie</h4>
+			<h4>Satie's first Gymnopedie</h4>
 			<pre><code>var gymnopedie = new Timbaland.loop( { tempo: 80 } );
 
 gymnopedie.addBeat( { detune: 0 } );
@@ -115,6 +125,26 @@ gymnopedie.addHarmony( [ { detune: 200 }, { detune: 600 }, { detune: 1100 } ] );
 gymnopedie.addRest( 2 );
 
 Timbaland.schedule( gymnopedie, 5000 );</code></pre>
+
+			<h4>Sh-ehpard scales</h4>
+			<pre><code>var loop = new Timbaland.loop( { tempo: 100 } );
+
+var rest = 0.5;
+var tempo = loop.tempo;
+var steps = 36;
+
+for ( var i = 0; i < steps; ++i )
+{
+    loop.addHarmony( [
+        { detune: -2400 + i * 1200 / steps, volume: i / steps },
+        { detune: -1200 + i * 1200 / steps, volume: 1 },
+        { detune: i * 1200 / steps, volume: 1 },
+        { detune: 1200 + i * 1200 / steps, volume: ( steps - i ) / steps }
+    ] );
+    loop.addRest( rest );
+}
+
+Timbaland.schedule( loop, 6 * steps * tempo * rest );</code></pre>
 
 			<h4>End it all</h4>
 			<pre><code>Timbaland.cancel()</code></pre>
