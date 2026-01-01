@@ -22,7 +22,7 @@ window.MathJax = {
 		.site-header .brand{display:flex;align-items:center;gap:1rem;vertical-align:top;}
 		.site-header .brand p{margin-bottom:2ex;}
 		.site-header .brand p:last-child{margin-bottom:0ex;}
-		.logo{width:48px;height:48px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#8b5cf6);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-family:sans-serif}
+		.logo{width:48px;height:48px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#8b5cf6);display:flex;align-items:center;justify-content:center;align-self:flex-start;margin-top:1.5ex;color:#fff;font-weight:700;font-family:sans-serif}
 		.site-header h1{font-size:2.25rem;margin:0 0 .25rem;font-weight:600;letter-spacing:-0.5px}
 		.site-header p{margin:0;color:var(--muted)}
 
@@ -211,70 +211,96 @@ Timbaland.schedule( jenny, 6000 );</code></pre>
 			var ctrl = document.createElement('div');
 			ctrl.className = 'controls';
 			var run = document.createElement('button'); run.textContent = 'Run';
-			var stop = document.createElement('button'); stop.textContent = 'Stop';
-			stop.disabled = true;
-			ctrl.appendChild(run);
-			ctrl.appendChild(stop);
-
-			var out = document.createElement('div'); out.className = 'output';
-
-			container.appendChild(ctrl);
-
-			// move the pre into the container
-			pre.parentNode.insertBefore(container, pre);
-			container.appendChild(pre);
-			container.appendChild(out);
+				var isCancelExample = /^\s*Timbaland\.cancel\(\)\s*$/.test(codeText);
+				var stop = null;
+				if (!isCancelExample) {
+					stop = document.createElement('button'); stop.textContent = 'Stop';
+					stop.disabled = true;
+				}
+				ctrl.appendChild(run);
+				if (stop) ctrl.appendChild(stop);
+				var out = document.createElement('div'); out.className = 'output';
+				container.appendChild(ctrl);
+				// move the pre into the container
+				pre.parentNode.insertBefore(container, pre);
+				container.appendChild(pre);
+				container.appendChild(out);
 
 			var wrapper = null;
 
 			run.addEventListener('click', function() {
 				out.textContent = '';
-				try {
-					// update UI to running state
-					run.classList.add('running');
-					run.textContent = 'Now playing';
-					run.disabled = true;
-					stop.disabled = false;
+					// implicitly stop all other running examples
+					document.querySelectorAll('.example .controls button').forEach(function(b) {
+						if (b !== stop && b.textContent && b.textContent.trim().toLowerCase() === 'stop' && !b.disabled) {
+							try { b.click(); } catch (e) { /* ignore */ }
+						}
+					});
+						try {
+							if (!isCancelExample) {
+								// update UI to running state
+								run.classList.add('running');
+								run.textContent = 'Now playing';
+								run.disabled = true;
+								if (stop) stop.disabled = false;
+							} else {
+								// for the cancel example do not keep running state
+								run.classList.remove('running');
+								run.textContent = 'Run';
+								run.disabled = false;
+							}
 
-					// If the code looks like HTML (starts with '<'), inject it into the page
-					if (/^\s*</.test(codeText)) {
-						if (wrapper) { wrapper.remove(); wrapper = null; }
-						wrapper = document.createElement('div');
-						wrapper.style.display = 'none';
-						wrapper.innerHTML = codeText;
-						document.body.appendChild(wrapper);
-						out.textContent = 'Inserted HTML demo (scripts executed if any)';
-						return;
-					}
+						// If the code looks like HTML (starts with '<'), inject it into the page
+						if (/^\s*</.test(codeText)) {
+							if (wrapper) { wrapper.remove(); wrapper = null; }
+							wrapper = document.createElement('div');
+							wrapper.style.display = 'none';
+							wrapper.innerHTML = codeText;
+							document.body.appendChild(wrapper);
+							out.textContent = 'Inserted HTML demo (scripts executed if any)';
+							return;
+						}
 
-					// Otherwise execute the code as JS in a Function (safer than eval)
-					var fn = new Function(codeText);
-					Timbaland.cancel();
-					fn();
-					out.textContent = 'Ran successfully';
+						// Otherwise execute the code as JS in a Function (safer than eval)
+						var fn = new Function(codeText);
+						Timbaland.cancel();
+						window.setTimeout( () => fn(), 15 );
+						out.textContent = 'Ran successfully';
+
+						// For cancel example, immediately reset UI (no persistent running)
+						if (isCancelExample) {
+							run.classList.remove('running');
+							run.textContent = 'Run';
+							run.disabled = false;
+							if (stop) stop.disabled = true;
+						}
+
 				} catch (e) {
 					out.textContent = 'Error: ' + (e && e.message ? e.message : e);
 					// revert UI on error
 					run.classList.remove('running');
 					run.textContent = 'Run';
 					run.disabled = false;
-					stop.disabled = true;
+					if (stop) stop.disabled = true;
 				}
 			});
 
-			stop.addEventListener('click', function() {
-				try {
-					// best-effort stop: remove injected wrapper and cancel timba
-					if (wrapper) { wrapper.remove(); wrapper = null; }
-					if (window.Timbaland && Timbaland.cancel) { Timbaland.cancel(); }
-					out.textContent = 'Stopped';
-					// reset UI
-					run.classList.remove('running');
-					run.textContent = 'Run';
-					run.disabled = false;
-					stop.disabled = true;
-				} catch (e) { out.textContent = 'Error stopping: ' + e; }
-			});
+				if (stop) {
+					stop.addEventListener('click', function() {
+						try {
+							// best-effort stop: remove injected wrapper and cancel timba
+							if (wrapper) { wrapper.remove(); wrapper = null; }
+							if (window.Timbaland && Timbaland.cancel) { Timbaland.cancel(); }
+							out.textContent = 'Stopped';
+							// reset UI
+							run.classList.remove('running');
+							run.textContent = 'Run';
+							run.disabled = false;
+							stop.disabled = true;
+						} catch (e) { out.textContent = 'Error stopping: ' + e; }
+					});
+				}
+
 		}
 
 		document.addEventListener('DOMContentLoaded', function() {
@@ -285,6 +311,37 @@ Timbaland.schedule( jenny, 6000 );</code></pre>
 				makeControls(code.parentNode, text);
 			});
 		});
+	})();
+	</script>
+
+	<!-- Tap overlay: disappears on any tap/click -->
+	<style>
+		#timba-overlay{position:fixed;inset:0;display:flex;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.45);z-index:9999}
+		#timba-overlay[aria-hidden="true"]{display:none}
+		.timba-overlay-inner{background:rgba(255,255,255,0.96);padding:18px 24px;border-radius:10px;font-weight:700;color:#0f1720;cursor:pointer;box-shadow:0 10px 30px rgba(2,6,23,0.35);font-family:Raleway, sans-serif;font-size:18px}
+		@media (min-width:900px){.timba-overlay-inner{font-size:20px;padding:20px 28px}}
+	</style>
+
+	<div id="timba-overlay" role="button" tabindex="0" aria-label="Tap for timba.js">
+		<div class="timba-overlay-inner">Tap for timba.js</div>
+	</div>
+
+	<script>
+	(function(){
+		var overlay = document.getElementById('timba-overlay');
+		if (!overlay) return;
+		function hide(){
+			overlay.setAttribute('aria-hidden','true');
+			overlay.style.display = 'none';
+			overlay.removeEventListener('pointerdown', hide);
+			// document.body.removeEventListener('keydown', keyHandler);
+
+			Timbaland.once( new Timbaland.beat(), 50 );
+		}
+		['click','mouseup','touchend','pointerup'].forEach( (event) =>
+		overlay.addEventListener('click', hide, {passive:true}));
+		// function keyHandler(e){ if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') hide(); }
+		// document.body.addEventListener('keydown', keyHandler);
 	})();
 	</script>
 

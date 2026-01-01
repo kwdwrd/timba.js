@@ -30,6 +30,17 @@ var Timbaland;
 
 
 
+        Timbaland.prototype.once = function (o, delay) {
+            if (!o) {
+                o = new Timbaland.beat();
+            }
+
+            delay = delay ? delay : 0;
+            window.setTimeout( () => o.play(), delay );
+        };
+
+
+
         Timbaland.prototype.cancel = function (L) {
             if (L) {
                 L.cancel();
@@ -249,7 +260,7 @@ var Timbaland;
             }
 
             var _this = this;
-            this.installListeners(['change', 'click', 'touchend'], function () {
+            this.installListeners(['change', 'click', 'touchend', 'mouseup', 'pointerup'], function () {
                 _this.finishInstall(acc, rej);
             });
         };
