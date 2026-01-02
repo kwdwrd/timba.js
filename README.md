@@ -50,6 +50,21 @@ apologize.addBeat( { detune: -200 } );
 Timbaland.ambient( apologize, { min_delay: 5000, max_delay: 10000 } );
 ```
 
+### In the Alps
+```
+var echo = new Timbaland.loop( { tempo: 100 } );
+
+echo.addBeat( { volume: 1.0 } );
+echo.addRest( 2 );
+echo.addBeat( { volume: 0.6 } );
+echo.addRest( 2 );
+echo.addBeat( { volume: 0.3 } );
+echo.addRest( 2 );
+echo.addBeat( { volume: 0.1 } );
+
+Timbaland.schedule( echo, 8000 );
+```
+
 ### Major chord in the key of Timba
 ```
 var major_timba = new Timbaland.harmony( [ { detune: 0 }, { detune: 400 }, { detune: 700 } ] );
@@ -57,7 +72,7 @@ var major_timba = new Timbaland.harmony( [ { detune: 0 }, { detune: 400 }, { det
 Timbaland.schedule( major_timba, 2000 );
 ```
 
-### Sadie's first Gymnopedie
+### Satie's first Gymnopedie
 ```
 var gymnopedie = new Timbaland.loop( { tempo: 80 } );
 
@@ -71,6 +86,56 @@ gymnopedie.addHarmony( [ { detune: 200 }, { detune: 600 }, { detune: 1100 } ] );
 gymnopedie.addRest( 2 );
 
 Timbaland.schedule( gymnopedie, 5000 );
+```
+
+### Sh-ehpard scales
+```
+var loop = new Timbaland.loop( { tempo: 100 } );
+
+var rest = 0.5;
+var tempo = loop.tempo;
+var steps = 36;
+
+for ( var i = 0; i < steps; ++i )
+{
+    loop.addHarmony( [
+        { detune: -2400 + i * 1200 / steps, volume: ( i + 1 ) / steps },
+        { detune: -1200 + i * 1200 / steps, volume: 1 },
+        { detune: i * 1200 / steps, volume: 1 },
+        { detune: 1200 + i * 1200 / steps, volume: ( steps - i ) / steps }
+    ] );
+    loop.addRest( rest );
+}
+
+Timbaland.schedule( loop, 600 * steps * rest / tempo );
+```
+
+### I found your number on the wall
+```
+var to_beat = ( hz ) => new Timbaland.beat( { detune: Math.log( hz / 1e3 ) / Math.log( 2 ) * 1200 } );
+var to_dtmf = ( i ) => new Timbaland.harmony( [ high_tones[( i - 1 ) % 3], low_tones[Math.trunc( ( i - 1 ) / 3 )] ] );
+var high_tones = [ 1209, 1336, 1477, 1633 ].map( ( hz ) => to_beat( hz ) );
+var low_tones = [ 697, 770, 852, 941 ].map( ( hz ) => to_beat( hz ) );
+
+var dtmf = [...Array( 9 ).keys()].map( ( i ) => to_dtmf( i + 1 ) );
+dtmf.unshift( new Timbaland.harmony( [ high_tones[1], low_tones[3] ] ) );
+
+var jenny = new Timbaland.loop( { tempo: 134 } );
+jenny.addElement( dtmf[8] );
+jenny.addRest( 1 );
+jenny.addElement( dtmf[6] );
+jenny.addRest( 1 );
+jenny.addElement( dtmf[7] );
+jenny.addRest( 1.75 );
+jenny.addElement( dtmf[5] );
+jenny.addRest( 1 );
+jenny.addElement( dtmf[3] );
+jenny.addRest( 1.45 );
+jenny.addElement( dtmf[0] );
+jenny.addRest( 1 );
+jenny.addElement( dtmf[9] );
+
+Timbaland.schedule( jenny, 6000 );
 ```
 
 ### End it all

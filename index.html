@@ -55,6 +55,7 @@ window.MathJax = {
 					<h1>timba.js</h1>
 					<p>timba.js is a full-featured Javascript file to give your page that singular Timbaland polish.</p>
 					<p>timba.js also settles the long-running question of whether HTML5 is Timbaland-complete; i.e., can HTML5 generate any audio derived from the regular language defined from the alphabet $\Sigma = \{ \text{Pause}, \text{Eh} \}$.</p>
+					<p>To bypass the initial overlay, access this content through the official <a href="https://github.com/kwdwrd/timba.js">GitHub page</a>.</p>
 				</div>
 			</div>
 		</div>
@@ -192,7 +193,7 @@ Timbaland.schedule( jenny, 6000 );</code></pre>
 	</main>
 
 	<footer class="site-footer container">
-		<p>See <a href="README.md">README.md</a> for more details.</p>
+		<p>See us on <a href="https://github.com/kwdwrd/timba.js">GitHub</a> for more details.</p>
 	</footer>
 
 	<!-- Restore original auto-test on load -->
@@ -316,7 +317,7 @@ Timbaland.schedule( jenny, 6000 );</code></pre>
 
 	<!-- Tap overlay: disappears on any tap/click -->
 	<style>
-		#timba-overlay{position:fixed;inset:0;display:flex;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.45);z-index:9999}
+		#timba-overlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.45);z-index:9999}
 		#timba-overlay[aria-hidden="true"]{display:none}
 		.timba-overlay-inner{background:rgba(255,255,255,0.96);padding:18px 24px;border-radius:10px;font-weight:700;color:#0f1720;cursor:pointer;box-shadow:0 10px 30px rgba(2,6,23,0.35);font-family:Raleway, sans-serif;font-size:18px}
 		@media (min-width:900px){.timba-overlay-inner{font-size:20px;padding:20px 28px}}
@@ -336,7 +337,7 @@ Timbaland.schedule( jenny, 6000 );</code></pre>
 			overlay.removeEventListener('pointerdown', hide);
 			// document.body.removeEventListener('keydown', keyHandler);
 
-			Timbaland.once( new Timbaland.beat(), 50 );
+			Timbaland.once( new Timbaland.beat(), 25 );
 		}
 		['click','mouseup','touchend','pointerup'].forEach( (event) =>
 		overlay.addEventListener('click', hide, {passive:true}));
